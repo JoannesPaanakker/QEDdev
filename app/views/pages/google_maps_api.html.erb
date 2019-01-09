@@ -1,0 +1,39 @@
+<table class="border">
+  <tr class="">
+    <th>Name</th>
+    <th>Phonenumber</th>
+    <th>eMail</th>
+    <th>Address</th>
+    <th>City</th>
+  </tr>
+  <% @users.each do |u| %>
+    <tr class="">
+      <td>
+        <%= u.last_name  %>, <%= u.first_name %>
+      </td>
+      <td>
+        <%= u.phonenumber %>
+      </td>
+      <td>
+        <%= u.email %>
+      </td>
+      <td>
+        <%= u.street_and_number %>
+      </td>
+      <td>
+        <%= u.city %>
+      </td>
+    </tr>
+  <% end %>
+</table>
+<div>
+  <%= @markers %>
+</div>
+<div class="col-xs-12 col-md-8 googlemap">
+  <div id="map" data-markers="<%= @markers %>">
+  </div>
+</div>
+<div>
+  <button id="dev2" >Clear</button>
+</div>
+<a id="kaboom" data-users="<%= @users_json %>" href="#">kaboom</a>

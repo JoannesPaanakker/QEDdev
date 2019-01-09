@@ -1,0 +1,55 @@
+function startMap(map) {
+  var map;
+  map = new google.maps.Map(document.getElementById('map'), {
+    center: {lat: 52.367145, lng: 4.886256},
+    zoom: 10
+  });
+  getMarkers(map);
+  getLocalMarker(map);
+}
+
+function getMarkers(map) {
+  const markers = JSON.parse(document.getElementById('map').dataset.markers);
+  console.log(markers);
+  markers.forEach((mark) => {
+    var LatLng = new google.maps.LatLng(mark.lat, mark.lng);
+    var marker = new google.maps.Marker({
+      position: LatLng,
+      map: map,
+      title: mark.title,
+    });
+    marker.addListener('click', showInfo);
+    function showInfo() {
+      document.getElementById(`${mark.id}-mark`).click();
+    }
+  })
+}
+
+function getLocalMarker(map) {
+  if (navigator && navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      console.log('latitude is ' + position.coords.latitude);
+      console.log('longitude is ' + position.coords.longitude);
+      var LatLoc = position.coords.latitude;
+      var LngLoc = position.coords.longitude;
+      var PosLoc = new google.maps.LatLng(LatLoc, LngLoc);
+      var marker = new google.maps.Marker({
+        position: PosLoc,
+        map: map,
+        title: 'jouw Locatie',
+        icon: {
+          url: "assets/avatar.svg",
+          scaledSize: new google.maps.Size(25, 25)
+          }
+      });
+      console.log(marker);
+    }, function() {
+        console.log('No geollocation data available');
+      })
+    }
+  else {
+    console.log('Geolocation is not supported');
+  }
+}
+
+export { startMap };
