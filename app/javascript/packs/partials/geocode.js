@@ -53,19 +53,12 @@ function saveLatLng(lat, lng, id) {
   //     // alert('Ajax gedegradeerd!')
   //   }
   // });
-
-
   var request = new XMLHttpRequest();
   request.open('PATCH', urll, true);
-  request.setRequestHeader('X-CSRF-Token', AUTH_TOKEN);
-  // request.setRequestHeader('Content-Type', 'application/x-www-form-urlencode; charset=utf-8');
-  // request.setRequestHeader('Content-Type', 'text/plain; charset=utf-8');
+  // request.setRequestHeader('X-CSRF-Token', AUTH_TOKEN);
   request.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
-  // request.send(`{user: { lat: ${lat}, lng: ${lng} }, authenticity_token: ${AUTH_TOKEN}}`);
-  // request.send(`{"user"=>{ "lat"=>"${lat}", "lng"=>"${lng}"}, "authenticity_token"=> "${AUTH_TOKEN}"}`);
-  // request.send(`{user: { lat: "${lat}", lng: "${lng}"}, authenticity_token: "${AUTH_TOKEN}"}`);
-  request.send({ user: { lat: lat, lng: lng}, authenticity_token: AUTH_TOKEN });
-  // request.send({ user: { lat: lat, lng: lng}, authenticity_token: AUTH_TOKEN });
+  const params = { user: { lat: lat, lng: lng}, authenticity_token: AUTH_TOKEN };
+  request.send(JSON.stringify(params));
 }
 
 
