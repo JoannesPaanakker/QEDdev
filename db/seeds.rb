@@ -8,12 +8,10 @@ users = User.create([
     first_name: 'John',
     last_name: 'Doe',
     password: '123456',
-    street_and_number: 'Amstelkade 169',
-    postalcode: '1078AZ',
+    street_and_number: 'Amstelkade 1',
+    postalcode: '',
     city: 'Amsterdam',
-    phonenumber: '654654654',
-    lat: 4.8,
-    lng: 52.3,
+    phonenumber: '654654654'
   },
   {
     email: 'jansen@qeddev.com',
