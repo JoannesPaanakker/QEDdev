@@ -27,6 +27,28 @@ import './index.css';
 
 // Instead of a class Square (above) we create a function Square (in a class we need "this", in a function we do not.:
 
+class HomePage extends React.Component {
+  render() {
+    return (
+      <div>
+        <Header />
+        <Game />
+      </div>
+    )
+  }
+}
+
+
+class Header extends React.Component {
+  render() {
+    return (
+        <div className="header">
+          "Boter, Kaas en Eieren"
+        </div>
+      );
+  }
+}
+
 function Square(props) {
   return (
     <button className="square" onClick={props.onClick}>
@@ -36,62 +58,33 @@ function Square(props) {
 }
 
 class Board extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      blokken: Array(9).fill(null),
-      volgendeIsX: true,
-    };
-  }
-
-  handleClick(i) {
-    const blokken  = this.state.blokken.slice();
-    if (bepaalWinnaar(blokken) || blokken[i]) {
-      return;
-    }
-    blokken[i] = this.state.volgendeIsX ? 'X' : 'Q';
-    this.setState({
-      blokken: blokken,
-      volgendeIsX: !this.state.volgendeIsX,
-    });
-  }
-
-  renderSquare(i) {
-    // return <Square value={this.state.blokken[i]} />;
+  renderSquare(i, row, col) {
     return (
       <Square
-        value={this.state.blokken[i]}
-        onClick={() => this.handleClick(i)}
+        value={this.props.blokken[i]}
+
+        onClick={() => this.props.onClick(i, row, col)}
       />
     );
   }
 
   render() {
-    const winnaar =  bepaalWinnaar(this.state.blokken);
-    let status;
-    if (winnaar) {
-      status = 'Winnaar is: ' + winnaar;
-    } else {
-      status = 'Next player: ' + (this.state.volgendeIsX ? 'X' : 'Q');
-    }
-
     return (
       <div>
-        <div className="status">{status}</div>
         <div className="board-row">
-          {this.renderSquare(0)}
-          {this.renderSquare(1)}
-          {this.renderSquare(2)}
+          {this.renderSquare(0, 1, 1)}
+          {this.renderSquare(1, 1, 2)}
+          {this.renderSquare(2, 1, 3)}
         </div>
         <div className="board-row">
-          {this.renderSquare(3)}
-          {this.renderSquare(4)}
-          {this.renderSquare(5)}
+          {this.renderSquare(3, 2, 1)}
+          {this.renderSquare(4, 2, 2)}
+          {this.renderSquare(5, 2, 3)}
         </div>
         <div className="board-row">
-          {this.renderSquare(6)}
-          {this.renderSquare(7)}
-          {this.renderSquare(324)}
+          {this.renderSquare(6, 3, 1)}
+          {this.renderSquare(7, 3, 2)}
+          {this.renderSquare(33, 3, 3)}
         </div>
       </div>
     );
@@ -99,15 +92,96 @@ class Board extends React.Component {
 }
 
 class Game extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      geschiedenis: [{
+        blokken: Array(9).fill(null),
+        locations: Array(9).fill([0, 0])
+      }],
+      stapNr: 0,
+      volgendeIsX: true,
+    };
+  }
+
+  handleClick(i, r, c) {
+    const geschiedenis = this.state.geschiedenis.slice(0, this.state.stapNr + 1);
+    const nu = geschiedenis[geschiedenis.length - 1];
+    const blokken  = nu.blokken.slice();
+    const locations = nu.locations.slice();
+    if (bepaalWinnaar(blokken) || blokken[i]) {
+      return;
+    }
+    locations[i] = [ r, c];
+    blokken[i] = this.state.volgendeIsX ? 'X' : 'Q';
+    this.setState({
+      geschiedenis: geschiedenis.concat([{
+        blokken: blokken,
+        locations: locations
+      }]),
+      stapNr: geschiedenis.length,
+      volgendeIsX: !this.state.volgendeIsX
+    });
+  }
+
+  gaNaar(stap) {
+    this.setState({
+      stapNr: stap,
+      volgendeIsX: (stap % 2) === 0,
+    });
+  }
+
   render() {
+    const geschiedenis = this.state.geschiedenis;
+    const nu = geschiedenis[this.state.stapNr];
+    const winnaar = bepaalWinnaar(nu.blokken);
+    const bloks = nu.blokken;
+    const locs = nu.locations;
+    const next = this.state.stapNr;
+    // const location = this.state.location;
+
+    const zetten = geschiedenis.map(
+        (stap, zet) => {
+          const tekst = zet ? 'Ga naar zet nr.' + zet : 'Terug naar start';
+          return (
+            <li key={zet}>
+              <button onClick={() => this.gaNaar(zet)}>
+                {tekst}
+              </button>
+              laatste zet: rij {locs[zet][0]} colom {locs[zet][1]}
+            </li>
+          );
+        }
+      );
+
+
+    let status;
+    if (winnaar) {
+      status = 'Winnaar: ' + winnaar;
+    } else {
+      status = 'Volgende speler: ' + (this.state.volgendeIsX ? 'X' : 'Q');
+    }
+
     return (
       <div className="game">
         <div className="game-board">
-          <Board />
+          <Board
+            blokken={nu.blokken}
+            onClick={(i, r, c) => this.handleClick(i, r, c)}
+          />
         </div>
         <div className="game-info">
-          <div>{/* status */}</div>
-          <ol>{/* TODO */}</ol>
+          <div>{status}</div>
+          <ol>{zetten}</ol>
+          <p> 0 {bloks[0]} {locs[0]}</p>
+          <p> 1 {bloks[1]} {locs[1]}</p>
+          <p> 2{bloks[2]} {locs[2]}</p>
+          <p> 3{bloks[3]} {locs[3]}</p>
+          <p> 4{bloks[4]}</p>
+          <p> 5{bloks[5]}</p>
+          <p> 6{bloks[6]}</p>
+          <p> 7{bloks[7]}</p>
+          <p> 8{bloks[33]}</p>
         </div>
       </div>
     );
@@ -118,11 +192,11 @@ function bepaalWinnaar(blokken) {
   const regels = [
     [0, 1, 2],
     [3, 4, 5],
-    [6, 7, 8],
+    [6, 7, 33],
     [0, 3, 6],
     [1, 4, 7],
-    [2, 5, 8],
-    [0, 4, 8],
+    [2, 5, 33],
+    [0, 4, 33],
     [2, 4, 6],
   ];
   for (let i = 0; i < regels.length; i++) {
@@ -137,6 +211,11 @@ function bepaalWinnaar(blokken) {
 // ========================================
 
 ReactDOM.render(
-  <Game />,
+  <HomePage />,
   document.getElementById('root')
+);
+
+ReactDOM.render(
+  <HomePage />,
+  document.getElementById('qed')
 );
