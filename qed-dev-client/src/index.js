@@ -112,7 +112,7 @@ class Game extends React.Component {
     if (bepaalWinnaar(blokken) || blokken[i]) {
       return;
     }
-    locations[i] = [ r, c];
+    locations[geschiedenis.length - 1] = [ r, c ];
     blokken[i] = this.state.volgendeIsX ? 'X' : 'Q';
     this.setState({
       geschiedenis: geschiedenis.concat([{
@@ -134,21 +134,23 @@ class Game extends React.Component {
   render() {
     const geschiedenis = this.state.geschiedenis;
     const nu = geschiedenis[this.state.stapNr];
+    const last = geschiedenis[geschiedenis.length - 1];
     const winnaar = bepaalWinnaar(nu.blokken);
     const bloks = nu.blokken;
-    const locs = nu.locations;
+    const locs = last.locations;
     const next = this.state.stapNr;
     // const location = this.state.location;
 
     const zetten = geschiedenis.map(
         (stap, zet) => {
           const tekst = zet ? 'Ga naar zet nr.' + zet : 'Terug naar start';
+          const tekst2 = zet ? 'deze zet: rij' + locs[zet - 1][0] + 'positie ' + locs[zet - 1][1] : '';
           return (
             <li key={zet}>
               <button onClick={() => this.gaNaar(zet)}>
                 {tekst}
               </button>
-              laatste zet: rij {locs[zet][0]} colom {locs[zet][1]}
+              {tekst2}
             </li>
           );
         }
@@ -173,15 +175,6 @@ class Game extends React.Component {
         <div className="game-info">
           <div>{status}</div>
           <ol>{zetten}</ol>
-          <p> 0 {bloks[0]} {locs[0]}</p>
-          <p> 1 {bloks[1]} {locs[1]}</p>
-          <p> 2{bloks[2]} {locs[2]}</p>
-          <p> 3{bloks[3]} {locs[3]}</p>
-          <p> 4{bloks[4]}</p>
-          <p> 5{bloks[5]}</p>
-          <p> 6{bloks[6]}</p>
-          <p> 7{bloks[7]}</p>
-          <p> 8{bloks[33]}</p>
         </div>
       </div>
     );
