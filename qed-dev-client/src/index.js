@@ -32,6 +32,7 @@ class HomePage extends React.Component {
     return (
       <div>
         <Header />
+        <Users />
         <Game />
       </div>
     )
@@ -43,7 +44,34 @@ class Header extends React.Component {
   render() {
     return (
         <div className="header">
-          "Boter, Kaas en Eieren"
+          "Boter, Kaas en Eieren"<br />
+          <a href="/googlemaps"> Testpagina</a>
+        </div>
+      );
+  }
+}
+
+
+class Users extends React.Component {
+  getUsers(){
+    var urll = '/users';
+    var request = new XMLHttpRequest();
+    request.onreadystatechange = function() {
+      if (this.readyState == 4 && this.status == 200) {
+          console.log(this.responseText);
+      }
+    };
+    request.open('GET', urll);
+    request.send();
+    // request.setRequestHeader('X-CSRF-Token', AUTH_TOKEN);
+
+  }
+
+  render() {
+    return (
+        <div className="users">
+          "Gebruikers:"<br />
+          {this.getUsers()}
         </div>
       );
   }
