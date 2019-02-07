@@ -1,0 +1,23 @@
+<h1>QED dev Textblock page</h1>
+<span id="data" data-textblock_ids="<%= @textblock_ids %>">text</span>
+<p>
+  Aantal: <%= @number  %>
+</p>
+
+<% @users.each do |u| %>
+  <div class="textblocks">
+    Textblokken user <%= u.id %>:
+    <% @index = u.id * 1000 %>
+    <% u.textblocks.each do |t| %>
+      <div class="textblock">
+        <span class="text" >
+          <%= t %>
+        </span>
+        <button id="textblock<%= @index %>"> edit </button>
+      </div>
+      <% @index += 1 %>
+    <% end %>
+  </div>
+<% end %>
+
+<button id="ksdfj">whatever</button>

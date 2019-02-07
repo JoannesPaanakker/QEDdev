@@ -4,9 +4,16 @@ class UsersController < ApplicationController
   def index
     @users = User.all
     respond_to do |format|
-      format.json { redirect_back(fallback_location: root_path) }
-      format.html { redirect_back(fallback_location: root_path) }
-      # format.js # index.js.erb
+      format.html
+      format.js { render json: @users }
+    end
+  end
+
+  def list
+    @list = User.all
+    respond_to do |format|
+      format.html
+      format.json { render json: @list }
     end
   end
 

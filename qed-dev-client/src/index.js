@@ -53,21 +53,35 @@ class Header extends React.Component {
 
 
 class Users extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      users: ["sfa"],
+    };
+  }
   getUsers(){
-    var urll = '/users';
+    var sers = null;
+    var urll = '/list';
     var request = new XMLHttpRequest();
     request.onreadystatechange = function() {
       if (this.readyState == 4 && this.status == 200) {
+          sers = (this.responseText);
           console.log(this.responseText);
       }
     };
-    request.open('GET', urll);
+    request.open('GET', urll, true);
+    // request.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
     request.send();
     // request.setRequestHeader('X-CSRF-Token', AUTH_TOKEN);
+
+    // this.setState({
+    //   users : sers,
+    // });
 
   }
 
   render() {
+    //const users = this.state.users;
     return (
         <div className="users">
           "Gebruikers:"<br />

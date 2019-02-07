@@ -3,6 +3,21 @@ class PagesController < ApplicationController
 
   end
 
+  def json
+    @users = User.all
+    @number = @users.count
+    @textblock_ids = []
+    @users.each do |u|
+      tcount = u.textblocks.count
+      i = 0
+      tcount.times do |c|
+        @textblock_ids << [u.id, i]
+        i += 1
+      end
+    end
+    render layout: 'json'
+  end
+
   def google_maps_api
     @users = User.all
     @users_json = @users.to_json

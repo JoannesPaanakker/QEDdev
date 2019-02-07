@@ -11,7 +11,8 @@ users = User.create([
     street_and_number: 'Amstelkade 1',
     postalcode: '',
     city: 'Amsterdam',
-    phonenumber: '654654654'
+    phonenumber: '654654654',
+    textblocks: ["asdf", "asdf"],
   },
   {
     email: 'jansen@qeddev.com',
@@ -24,6 +25,7 @@ users = User.create([
     phonenumber: '65465465489795',
     lat: 4.81,
     lng: 52.31,
+    textblocks: ["asdf", "asdf"],
   },
   {
     email: 'pietersen@qeddev.com',
@@ -36,6 +38,8 @@ users = User.create([
     phonenumber: '65465465489795',
     lat: 4.83,
     lng: 52.33,
+    textblocks: ["asdf", "asdf"],
+
   },
   {
     email: 'goofy@qeddev.com',
@@ -48,6 +52,7 @@ users = User.create([
     phonenumber: '65465465489795',
     lat: 4.85,
     lng: 52.30,
+    textblocks: ["asdf", "asdf"],
   },
   {
     email: 'Duck@qeddev.com',
@@ -60,6 +65,7 @@ users = User.create([
     phonenumber: '65465465489795',
     lat: 4.86,
     lng: 52.35,
+    textblocks: ["asdf", "asdf"],
   },
 ])
 
