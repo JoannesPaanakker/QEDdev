@@ -19,9 +19,10 @@ class UsersController < ApplicationController
 
   def update
     @user = User.find(params[:id])
+    @user.textblocks[params[:index]] = params[:newtext]
     @user.update!(user_params)
     respond_to do |format|
-      format.json { redirect_back(fallback_location: root_path) }
+      format.json
       format.html { redirect_back(fallback_location: root_path) }
       # format.js # index.js.erb
     end
@@ -39,7 +40,9 @@ class UsersController < ApplicationController
       :city,
       :phonenumber,
       :lat,
-      :lng
+      :lng,
+      :textblocks,
+      :id
     )
   end
 

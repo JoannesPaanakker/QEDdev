@@ -8,15 +8,46 @@ function textBlock() {
     console.log(textblock_ids[i]);
     // button_markers[i] = document.getElementById('jhgkjhgkj');
     button_markers[i] = document.getElementById(`textblock` + `${ textblock_ids[i][0] * 1000 + textblock_ids[i][1] }`);
-    console.log(button_markers[i]);
+    // console.log(button_markers[i]);
     button_markers[i].addEventListener('click', updateTextBlock(textblock_ids[i]));
   };
 }
 
 function updateTextBlock(tid) {
   return function() {
-      console.log(tid);
+    console.log(tid);
+    const editblock = document.getElementById(`edit` + `${tid[0] * 1000 + tid[1]}`);
+    const text = document.getElementById(`text` + `${tid[0] * 1000 + tid[1]}`);
+    if (editblock.style.display === 'none') {
+      document.getElementById(`textblock` + `${tid[0] * 1000 + tid[1]}`).innerHTML = 'save textblock' + `${tid[0] * 1000 + tid[1]}`;
+      editblock.style.display = 'block';
+      text.style.display = 'none';
+    } else {
+      document.getElementById(`textblock` + `${tid[0] * 1000 + tid[1]}`).innerHTML = 'edit textblock' + `${tid[0] * 1000 + tid[1]}`;
+      editblock.style.display = 'none';
+      text.style.display = 'block';
+      saveTextBlock(tid);
+    }
   }
 }
+
+function saveTextBlock(tid) {
+  console.log("save textblock");
+  var urll = '/users/' + tid[0];
+  var text = document.getElementById(`new` + `${tid[0] * 1000 + tid[1]}`).value;
+  document.getElementById(`text` + `${tid[0] * 1000 + tid[1]}`).innerHTML = text;
+  console.log(text);
+  var AUTH_TOKEN = document.querySelector('meta[name="csrf-token"]').content;
+  console.log(AUTH_TOKEN);
+  var request = new XMLHttpRequest();
+  request.open('PATCH', urll, true);
+  // request.setRequestHeader('X-CSRF-Token', AUTH_TOKEN);
+  request.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+  const params = { user: { id: tid[0] }, index: tid[1], newtext: text , authenticity_token: AUTH_TOKEN };
+  request.send(JSON.stringify(params));
+}
+
+
+
 
 export { textBlock };

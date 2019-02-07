@@ -9,15 +9,18 @@
     Textblokken user <%= u.id %>:
     <% @index = u.id * 1000 %>
     <% u.textblocks.each do |t| %>
-      <div class="textblock">
-        <span class="text" >
+      <button id="textblock<%= @index %>"> edit textblock<%= @index %> </button>
+      <div id="text<%= @index %>" class="textblock">
+        <div class="text" >
+          textblock<%= @index %> <br>
           <%= t %>
-        </span>
-        <button id="textblock<%= @index %>"> edit </button>
+        </div>
+
+      </div>
+      <div id="edit<%= @index %>" class="edit-block" style="display: none">
+        <input id="new<%= @index %>" type="text" value="<%= t %>">
       </div>
       <% @index += 1 %>
     <% end %>
   </div>
 <% end %>
-
-<button id="ksdfj">whatever</button>
